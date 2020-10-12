@@ -19,7 +19,7 @@ export function sumar([f1, c1], [f2, c2]) {
 
 export function tableroDeString(s) {
   const datos = [];
-  for (let n of s.matchAll(/\d+/g)) {
+  for (let [n] of s.matchAll(/\d+/g)) {
     datos.push(Number(n));
   }
   const n = Math.floor(Math.sqrt(datos.length));
@@ -27,6 +27,8 @@ export function tableroDeString(s) {
 
   if (n * n !== datos.length) return Left("El tablero no es cuadrado");
   if (indice === -1) return Left("El tablero no contiene espacio en blanco");
+  if (new Set(datos).size !== datos.length)
+    return Left("El tablero tiene valores repetidos");
 
   return Right({
     n,
@@ -34,6 +36,26 @@ export function tableroDeString(s) {
     datos,
   });
 }
+
+export function movimientosDeString(s) {
+  const movimientos = [];
+  for (let [m] of s.matchAll(/[URDL]/g)) movimientos.push(m);
+  return Right(movimientos);
+}
+
+export const letraAMovimiento = {
+  U: "up",
+  R: "right",
+  D: "down",
+  L: "left",
+};
+
+export const movimientoContrario = {
+  up: "down",
+  right: "left",
+  down: "up",
+  left: "right",
+};
 
 export const desplazamientosMovimientos = {
   up: [-1, 0],
